@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import HomeTabPanel from "../modules/home/components/HomeTabPanel";
 import image1 from "../image-1.png";
@@ -95,19 +96,28 @@ const Home = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Box sx={{ py: 2 }}>
-          <Typography variant="h4">10 Gopeng Street</Typography>
-          <Chip
-            sx={{
-              color: "black",
-              background: "white",
-              border: "1px solid #808080",
-              borderRadius: "3px",
-            }}
-            label="Condo"
-            variant="outlined"
-            size="medium"
-          />
+        <Box sx={{ py: 2, display: "flex" }}>
+          <div>
+            <ArrowBackIcon />
+            <Typography variant="h4">10 Gopeng Street</Typography>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Chip
+                sx={{
+                  color: "black",
+                  background: "white",
+                  border: "1px solid #808080",
+                  borderRadius: "3px",
+                }}
+                label="Condo"
+                variant="outlined"
+                size="medium"
+              />
+              <Typography sx={{ paddingLeft: 2 }} variant="subtitle2">
+                Chinatown/Tanjong Pager (D2)
+              </Typography>
+            </div>
+          </div>
+          <div></div>
         </Box>
 
         <Box sx={{ flexGrow: 1, overflow: "hidden", width: "100%" }}>
