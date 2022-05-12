@@ -180,7 +180,7 @@ const Home = () => {
             </StyledTabs>
           </Box>
           <Grid container columnSpacing={2}>
-            <Grid item md={7}>
+            <Grid item md={8}>
               <>
                 <HomeTabPanel value={value} index={0}>
                   <Box
