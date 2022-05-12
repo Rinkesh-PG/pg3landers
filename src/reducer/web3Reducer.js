@@ -1,7 +1,8 @@
-import { SET_WEB3_ERROR, SET_WEB3_INSTANCE } from "../actions/web3Actions";
+import { SET_ACCOUNT_DATA, SET_WEB3_ERROR, SET_WEB3_INSTANCE } from "../actions/web3Actions";
 
 let initialState = {
-  web3: null,
+  accountAddress: null,
+  balance: 0,
   error: {},
 };
 
@@ -17,6 +18,9 @@ export default function web3Reducer(state, action) {
     case SET_WEB3_ERROR:
       const error = payload;
       return { ...state, error };
+
+    case SET_ACCOUNT_DATA:
+      return { ...state, ...payload, error: {} };
 
     default:
       return state;
