@@ -171,7 +171,7 @@ const Home = () => {
             </StyledTabs>
           </Box>
           <Grid container columnSpacing={2}>
-            <Grid item md={7}>
+            <Grid item md={8}>
               <>
                 <HomeTabPanel value={value} index={0}>
                   <Box
@@ -313,7 +313,7 @@ const Home = () => {
               <div style={{ marginTop: "0.5rem" }}>
                 <Wallet />
               </div>
-              <Box sx={{ marginTop: "0.5rem", width: "100%" }}>
+              <Box sx={{ width: '350px', marginTop: "0.5rem" }}>
                 <img src={image4} style={{ display: "block", width: "100%" }} />
               </Box>
             </Grid>
