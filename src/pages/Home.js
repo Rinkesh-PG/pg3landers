@@ -3,17 +3,16 @@ import {
   Box,
   Container,
   Grid,
-  Paper,
-  Button,
   Tab,
   Tabs,
   Typography,
-  Card,
   Chip,
 } from "@mui/material";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 import HomeTabPanel from "../modules/home/components/HomeTabPanel";
 import image1 from "../image-1.png";
@@ -25,7 +24,6 @@ import Wallet from "../modules/home/components/Wallet";
 import Ether from "../assets/svg/Ether.svg";
 import { formatCurrency } from "../util/common";
 import BiddingComponent from "../modules/common/components/BiddingComponent";
-
 
 const StyledTabs = styled(props => (
   <Tabs
@@ -72,7 +70,6 @@ const Home = () => {
   const highestBidPrice = 370.55;
   const [initialData, setInitialData] = useState([]);
   const [value, setValue] = useState(0);
-  
 
   const getData = async () => {
     const { data } = await axios.get("http://3.110.107.252/api/property-list");
@@ -87,8 +84,6 @@ const Home = () => {
     setValue(val);
   };
 
- 
-
   return (
     <Box
       sx={{
@@ -98,28 +93,42 @@ const Home = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Box sx={{ py: 2, display: "flex" }}>
+        <Box
+          sx={{
+            py: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <div>
-            <ArrowBackIcon />
-            <Typography variant="h4">10 Gopeng Street</Typography>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Chip
-                sx={{
-                  color: "black",
-                  background: "white",
-                  border: "1px solid #808080",
-                  borderRadius: "3px",
-                }}
-                label="Condo"
-                variant="outlined"
-                size="medium"
-              />
-              <Typography sx={{ paddingLeft: 2 }} variant="subtitle2">
-                Chinatown/Tanjong Pager (D2)
-              </Typography>
-            </div>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <ArrowBackIcon />
+              <div style={{ marginLeft: "30px" }}>
+                <Typography variant="h4">10 Gopeng Street</Typography>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Chip
+                    sx={{
+                      color: "black",
+                      background: "white",
+                      border: "1px solid #808080",
+                      borderRadius: "3px",
+                    }}
+                    label="Condo"
+                    variant="outlined"
+                    size="medium"
+                  />
+                  <Typography sx={{ paddingLeft: 2 }} variant="subtitle2">
+                    Chinatown/Tanjong Pager (D2)
+                  </Typography>
+                </div>
+              </div>
+            </Box>
           </div>
-          <div></div>
+          <div>
+            <FavoriteIcon />
+            <MoreHorizIcon sx={{ marginLeft: 3 }} />
+          </div>
         </Box>
 
         <Box sx={{ flexGrow: 1, overflow: "hidden", width: "100%" }}>
@@ -309,11 +318,11 @@ const Home = () => {
               </>
             </Grid>
             <Grid item md={3}>
-              <BiddingComponent highestBidPrice={highestBidPrice}/>
+              <BiddingComponent highestBidPrice={highestBidPrice} />
               <div style={{ marginTop: "0.5rem" }}>
                 <Wallet />
               </div>
-              <Box sx={{ marginTop: "0.5rem", width: "100%" }}>
+              <Box sx={{ marginTop: "0.5rem", width: "350px" }}>
                 <img src={image4} style={{ display: "block", width: "100%" }} />
               </Box>
             </Grid>
