@@ -13,7 +13,7 @@ const HomeTabPanel = props => {
       aria-labelledby={`simple-tab-${index}`}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ paddingTop: 5, paddingBottom: 3 }}>
           <Typography>{children}</Typography>
         </Box>
       )}
