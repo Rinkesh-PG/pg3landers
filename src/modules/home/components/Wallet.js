@@ -23,32 +23,23 @@ const Wallet = ({
 }) => {
   const dispatch = useDispatch();
   // TODO: Remove examples of how to call contract
-  // useEffect(() => {
-  //   const fun = async () => {
-  //     if (web3Client && contract) {
-  //       const bid = await contract.methods
-  //         .placeBid()
-  //         .send({
-  //           from: accountAddress,
-  //           value: web3Client.utils.toWei("0.01", "ether"),
-  //         });
-  //       const highestBid = await contract.methods.highestBid().call();
-  //       const highestBidder = await contract.methods.highestBidder().call();
-  //       console.log(
-  //         "===> manager & Players : ",
-  //         highestBid,
-  //         highestBidder,
-  //         bid
-  //       );
-  //     }
-  //   };
-  //   fun();
-  // }, [web3Client, contract]);
+  useEffect(() => {
+    const fun = async () => {
+      if (web3Client && contract) {
+        const manager = await contract.methods
+          .setGreeting("Namaste")
+          .send({ from: accountAddress });
+        // const players = await contract.methods.getPlayers().call();
+        console.log("===> manager & Players : ", manager);
+      }
+    };
+    fun();
+  }, [web3Client, contract]);
 
   useEffect(() => {
     if (window.ethereum) {
       const web3 = new Web3(window.ethereum);
-      dispatch(setWeb3Client(web3));
+      dispatch(setWeb3ClientProp(web3));
     }
   }, []);
 
@@ -58,7 +49,7 @@ const Wallet = ({
         const account = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
-        dispatch(setAccountData(account[0]));
+        dispatch(setAccountDataProp(account[0]));
       } catch (error) {
         if (error.code === 4001) {
           dispatch(setWeb3Error(error));
@@ -70,8 +61,8 @@ const Wallet = ({
   };
 
   return (
-    <Card variant="outlined" style={{ width: "350px", padding: "1.5rem" }}>
-      <Typography sx={{ fontSize: 16, textAlign: "justify" }} gutterBottom>
+    <Card variant="outlined" style={{width: '350px', padding: '1.5rem'}}>
+      <Typography sx={{ fontSize: 16, textAlign: 'justify' }} gutterBottom>
         Connect with your available metamask wallet or create a new wallet to
         Sign in.
       </Typography>
@@ -91,6 +82,30 @@ const Wallet = ({
         </OutlinedButton>
       </div>
     </Card>
+    // <div style={{ width: "300px", margin: "auto" }}>
+    //   <h1>Welcome to PropertyGuru Auctions</h1>
+    //   <div>
+    //     Connect with your available metamask wallet or create a new wallet to
+    //     Sign in.
+    //     <div style={{ margin: "1rem 0" }}>
+    //       <Button onClick={linkWallet} variant="outlined">
+    //         Link Now
+    //       </Button>
+    //     </div>
+    //   </div>
+    //   {metamaskError.message && (
+    //     <p style={{ color: "red" }}>{metamaskError.message}</p>
+    //   )}
+    //   <p>{accountAddress}</p>
+    //   <strong>Balance: </strong>
+    //   {balance}
+    //   <br />
+    //   <div>
+    //     <Button variant="primary" onClick={connect2ContractProp}>
+    //       Connect Contract
+    //     </Button>
+    //   </div>
+    // </div>
   );
 };
 
@@ -102,5 +117,12 @@ const mapStateToProps = (state, _ownProps) => ({
   contract: state.web3Reducer.contractMeta.contract,
 });
 
-export default connect(mapStateToProps)(Wallet);
+const mapDispatchToProps = dispatch => {
+  return {
+    setAccountDataProp: address => dispatch(setAccountData(address)),
+    connect2ContractProp: () => dispatch(connect2Contract()),
+    setWeb3ClientProp: client => dispatch(setWeb3Client(client)),
+  };
+};
 
+export default connect(mapStateToProps, mapDispatchToProps)(Wallet);

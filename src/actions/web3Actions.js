@@ -6,20 +6,12 @@ export const SET_WEB3_INSTANCE = "SET_WEB3_INSTANCE";
 export const SET_WEB3_ERROR = "SET_WEB3_ERROR";
 export const SET_ACCOUNT_DATA = "SET_ACCOUNT_DATA";
 export const SET_NEW_CONTRACT = "SET_NEW_CONTRACT";
-export const SET_HIGHEST_BID = "SET_HIGHEST_BID";
 
 export const setWeb3Client = instance => {
   return {
     type: SET_WEB3_INSTANCE,
     payload: instance,
   };
-};
-
-export const setHighestBidPrice = price => {
-    return {
-        type: SET_HIGHEST_BID,
-        payload: price
-    }
 };
 
 export const setWeb3Error = error => {

@@ -5,31 +5,11 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Checkbox, InputAdornment } from '@mui/material';
-import { connect } from 'react-redux';
+import { InputAdornment } from '@mui/material';
 
-function PaymentDialog({open, onClose, highestBidPrice, contract, web3Client, accountAddress}) {
+export default function FormDialog({open, onClose}) {
   const currentMaxBid = 300;
-  const [agree, setAgree] = React.useState(false);
   const [bidValue, setBidValue] = React.useState();
-  const [error, setError] = React.useState();
-
-  const updateBid = (amount) => {
-    setBidValue(amount);
-    setError();
-  }
-
-  const placeBid = async () => {
-    if (bidValue > highestBidPrice) {
-      const bidAddress = await contract.methods.placeBid().send(
-        {from: accountAddress, value: web3Client.utils.toWei(bidValue, "wei"),}
-      );
-      console.log('=====>>> ', bidAddress);
-      console.log('=====>>> ', JSON.stringify(bidAddress))
-    } else {
-      setError("Bid amount should be more than the highest bid!")
-    }
-  }
 
   return (
       <Dialog open={open} onClose={onClose}>
@@ -57,28 +37,22 @@ function PaymentDialog({open, onClose, highestBidPrice, contract, web3Client, ac
             fullWidth
             variant="standard"
             value={bidValue}
-            onChange={(e) => {updateBid(e.target.value)}}
+            onChange={(e) => {setBidValue(e.target.value)}}
             InputProps={{
               startAdornment: <InputAdornment position="start">ETH</InputAdornment>,
             }}
           />
-        <div style={{marginTop: '1rem'}}>
-          <Checkbox checked={agree} onChange={() => {setAgree(!agree)}} style={{color: 'black', float: 'left'}} />
-          I have read and I agree to the bidding agreement. I understand that blockchain transactions are irreversible if I win the bid.
-        </div>
         </DialogContent>
-        {error && <div style={{color: 'red', margin: '0.5rem 2rem'}}>{error}</div>}
         <DialogActions style={{margin: '0 0.5rem 0.5rem'}}>
-          <Button style={{color: 'black'}} onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>Cancel</Button>
           <Button
           style={{
-            background: agree ? "#f24727" : "#aaaaaa",
+            background: "#f24727",
             color: "white",
             padding: "10px",
-            fontWeight: "bold"
+            fontWeight: "bold",
           }}
-          disabled={!agree}
-          onClick={placeBid}
+          onClick={onClose}
         >
           Place Bid
         </Button>
@@ -86,13 +60,3 @@ function PaymentDialog({open, onClose, highestBidPrice, contract, web3Client, ac
       </Dialog>
   );
 }
-
-const mapStateToProps = (state) => ({
-  balance: state.web3Reducer.balance,
-  accountAddress: state.web3Reducer.accountAddress,
-  web3Client: state.web3Reducer.web3Client,
-  contract: state.web3Reducer.contractMeta.contract,
-  highestBidPrice: state.web3Reducer.highestBidPrice
-});
-
-export default connect(mapStateToProps)(PaymentDialog);
