@@ -1,8 +1,11 @@
 import { ethers } from "ethers";
+import Web3 from "web3";
+import { newContract } from "../util/contract";
 
 export const SET_WEB3_INSTANCE = "SET_WEB3_INSTANCE";
 export const SET_WEB3_ERROR = "SET_WEB3_ERROR";
 export const SET_ACCOUNT_DATA = "SET_ACCOUNT_DATA";
+export const SET_NEW_CONTRACT = "SET_NEW_CONTRACT";
 
 export const setWeb3Client = instance => {
   return {
@@ -26,28 +29,24 @@ export const setAccountData = address => {
         params: [address, "latest"],
       });
       const etherBal = ethers.utils.formatEther(balance);
-      console.log('Ether bal : ', etherBal);
+      console.log("Ether bal : ", etherBal);
       dispatch({
         type: SET_ACCOUNT_DATA,
         payload: { accountAddress: address, balance: etherBal },
       });
+    //   const web3 = new Web3(window.ethereum)
+    //   dispatch(setWeb3Client(web3))
     } catch (error) {
-        console.log('====>>getting error')
       setWeb3Error(error);
     }
   };
 };
 
-// export const requestMetaMaskAccess = () => {
-//     return async dispatch => {
-//         try {
-//             const account = await window.ethereum.request({ method: "eth_requestAccounts" });
-//             const web3Client = await new Web3(window.ethereum);
-//             dispatch(setWeb3Client(web3Client));
-//         } catch(error) {
-//             dispatch(setWeb3Error(error));
-//             return;
-//         }
-//     }
-// }
-
+export const connect2Contract = () => {
+  return (dispatch, getState) => {
+    const contractMeta = getState().web3Reducer.contractMeta;
+    const web3Client = getState().web3Reducer.web3Client;
+    const contract = newContract(contractMeta, web3Client);
+    dispatch({ type: SET_NEW_CONTRACT, payload: contract });
+  };
+};
