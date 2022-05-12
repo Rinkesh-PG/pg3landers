@@ -14,17 +14,22 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import {
+  setAccountData,
+  connect2Contract,
+  setWeb3Client,
+} from "../actions/web3Actions";
 
+import Ether from "../assets/svg/Ether.svg";
 import HomeTabPanel from "../modules/home/components/HomeTabPanel";
 import image1 from "../image-1.png";
 import image2 from "../image-2.png";
 import image3 from "../image-3.png";
 import image4 from "../assets/image-4.png";
-import * as url from "url";
 import Wallet from "../modules/home/components/Wallet";
-import Ether from "../assets/svg/Ether.svg";
-import { formatCurrency } from "../util/common";
 import BiddingComponent from "../modules/common/components/BiddingComponent";
+import { connect } from "react-redux";
+import { formatCurrency } from "../util/common";
 
 const StyledTabs = styled(props => (
   <Tabs
@@ -67,7 +72,7 @@ const a11yProps = index => {
   };
 };
 
-const Home = () => {
+const Home = ({ balance }) => {
   const highestBidPrice = 370.55;
   const [initialData, setInitialData] = useState([]);
   const [value, setValue] = useState(0);
@@ -81,7 +86,7 @@ const Home = () => {
     getData();
   }, []);
 
-  const handleChange = (event, val) => {
+  const handleChange = (_event, val) => {
     setValue(val);
   };
 
@@ -127,6 +132,20 @@ const Home = () => {
             </Box>
           </div>
           <div>
+            {balance ? (
+              <div
+                style={{
+                  display: "inline-block",
+                  marginRight: "1rem",
+                }}
+              >
+                <span style={{ verticalAlign: "super", marginRight: '0.5rem' }}>Balance:</span>
+          <img src={Ether} style={{ height: "24px", filter: "invert(1)" }} />{" "}
+          <span style={{ verticalAlign: "super" }}>{formatCurrency(balance * 1000)}</span>
+              </div>
+            ) : (
+              ""
+            )}
             <FavoriteIcon />
             <MoreHorizIcon sx={{ marginLeft: 3 }} />
           </div>
@@ -364,7 +383,7 @@ const Home = () => {
             <Grid item md={3}>
               <BiddingComponent highestBidPrice={highestBidPrice} />
               <div style={{ marginTop: "0.5rem" }}>
-                <Wallet />
+                {!balance && <Wallet />}
               </div>
               <Box sx={{ marginTop: "0.5rem", width: "350px" }}>
                 <img src={image4} style={{ display: "block", width: "100%" }} />
@@ -377,4 +396,20 @@ const Home = () => {
   );
 };
 
-export default Home;
+const mapStateToProps = (state, _ownProps) => ({
+  metamaskError: state.web3Reducer.error,
+  balance: state.web3Reducer.balance,
+  accountAddress: state.web3Reducer.accountAddress,
+  web3Client: state.web3Reducer.web3Client,
+  contract: state.web3Reducer.contractMeta.contract,
+});
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setAccountDataProp: address => dispatch(setAccountData(address)),
+    connect2ContractProp: () => dispatch(connect2Contract()),
+    setWeb3ClientProp: client => dispatch(setWeb3Client(client)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
