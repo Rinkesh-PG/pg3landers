@@ -11,8 +11,8 @@ let initialState = {
   balance: 0,
   error: {},
   contractMeta: {
-    address: "0x8879dF37c0ad41964a3088121fF9d26D53e3fDFF",
-    abi: [
+    address: "0xF2E246BB76DF876Cef8b38ae84130F4F55De395b",
+    /* abi: [
       {
         inputs: [],
         stateMutability: "nonpayable",
@@ -67,6 +67,30 @@ let initialState = {
         constant: true,
         signature: "0xf71d96cb",
       },
+    ], */
+    abi: [
+      { type: "constructor", inputs: [], stateMutability: "nonpayable" },
+      {
+        name: "greet",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "string", internalType: "string" }],
+        stateMutability: "view",
+      },
+      {
+        name: "greeting",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "string", internalType: "string" }],
+        stateMutability: "view",
+      },
+      {
+        name: "setGreeting",
+        type: "function",
+        inputs: [{ name: "_greeting", type: "string", internalType: "string" }],
+        outputs: [],
+        stateMutability: "nonpayable",
+      },
     ],
   },
 };
@@ -88,7 +112,10 @@ export default function web3Reducer(state, action) {
       return { ...state, ...payload, error: {} };
 
     case SET_NEW_CONTRACT:
-      return { ...state, contractMeta: {...state.contractMeta, contract: payload}};
+      return {
+        ...state,
+        contractMeta: { ...state.contractMeta, contract: payload },
+      };
 
     default:
       return state;

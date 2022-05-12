@@ -4,6 +4,7 @@ import {
   Container,
   Grid,
   Paper,
+  Button,
   Tab,
   Tabs,
   Typography,
@@ -15,6 +16,8 @@ import image1 from "../image-1.png";
 import image2 from "../image-2.png";
 import image3 from "../image-3.png";
 import * as url from "url";
+import PaymentDialog from "../modules/common/components/PaymentDialog";
+import Wallet from "../modules/home/components/Wallet";
 
 const a11yProps = index => {
   return {
@@ -26,6 +29,7 @@ const a11yProps = index => {
 const Home = () => {
   const [initialData, setInitialData] = useState([]);
   const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
 
   const getData = async () => {
     const { data } = await axios.get("http://3.110.107.252/api/property-list");
@@ -40,15 +44,18 @@ const Home = () => {
     setValue(val);
   };
 
+  const toggleDialog = (val) => {
+    setOpen(val);
+  }
+
   return (
     <Box
       sx={{
         background: "black",
+        minHeight: "100vh",
         color: "white",
       }}
     >
-      <a href="/wallet">Connect Wallet</a>
-
       <Container maxWidth="lg">
         <Box sx={{ flexGrow: 1, overflow: "hidden", width: "100%" }}>
           <Grid container spacing={1}>
@@ -242,8 +249,13 @@ const Home = () => {
               >
                 <Box>
                   <Typography>Highest Bid</Typography>
+                  <Button onClick={() => toggleDialog(true)}>Place your bid</Button>
+                  <PaymentDialog open={open} onClose={() => toggleDialog(false)}/>
                 </Box>
               </Box>
+              <div style={{marginTop: '0.5rem'}}>
+              <Wallet />
+              </div>
             </Grid>
           </Grid>
         </Box>
