@@ -61,8 +61,8 @@ const Wallet = ({
   };
 
   return (
-    <Card variant="outlined" style={{ padding: "2rem" }}>
-      <Typography sx={{ fontSize: 16 }} gutterBottom>
+    <Card variant="outlined" style={{width: '350px', padding: '1.5rem'}}>
+      <Typography sx={{ fontSize: 16, textAlign: 'justify' }} gutterBottom>
         Connect with your available metamask wallet or create a new wallet to
         Sign in.
       </Typography>
