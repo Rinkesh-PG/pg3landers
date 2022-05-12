@@ -20,8 +20,11 @@ import image2 from "../image-2.png";
 import image3 from "../image-3.png";
 import image4 from "../assets/image-4.png";
 import * as url from "url";
-import PaymentDialog from "../modules/common/components/PaymentDialog";
 import Wallet from "../modules/home/components/Wallet";
+import Ether from "../assets/svg/Ether.svg";
+import { formatCurrency } from "../util/common";
+import BiddingComponent from "../modules/common/components/BiddingComponent";
+
 
 const StyledTabs = styled(props => (
   <Tabs
@@ -65,9 +68,10 @@ const a11yProps = index => {
 };
 
 const Home = () => {
+  const highestBidPrice = 370.55;
   const [initialData, setInitialData] = useState([]);
   const [value, setValue] = useState(0);
-  const [open, setOpen] = useState(false);
+  
 
   const getData = async () => {
     const { data } = await axios.get("http://3.110.107.252/api/property-list");
@@ -82,9 +86,7 @@ const Home = () => {
     setValue(val);
   };
 
-  const toggleDialog = val => {
-    setOpen(val);
-  };
+ 
 
   return (
     <Box
@@ -296,27 +298,8 @@ const Home = () => {
                 </HomeTabPanel>
               </>
             </Grid>
-            <Grid item md={4}>
-              <Card
-                sx={{
-                  marginTop: "-60px",
-                  background: "white",
-                  color: "black",
-                  py: "20px",
-                  px: "10px",
-                }}
-              >
-                <Box>
-                  <Typography>Highest Bid</Typography>
-                  <Button onClick={() => toggleDialog(true)}>
-                    Place your bid
-                  </Button>
-                  <PaymentDialog
-                    open={open}
-                    onClose={() => toggleDialog(false)}
-                  />
-                </Box>
-              </Card>
+            <Grid item md={3}>
+              <BiddingComponent highestBidPrice={highestBidPrice}/>
               <div style={{ marginTop: "0.5rem" }}>
                 <Wallet />
               </div>

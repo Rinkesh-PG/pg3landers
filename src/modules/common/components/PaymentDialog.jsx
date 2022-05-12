@@ -45,7 +45,17 @@ export default function FormDialog({open, onClose}) {
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Cancel</Button>
-          <Button onClick={onClose}>Place Bid</Button>
+          <Button
+          style={{
+            background: "#f24727",
+            color: "white",
+            padding: "10px",
+            fontWeight: "bold",
+          }}
+          onClick={onClose}
+        >
+          Place Bid
+        </Button>
         </DialogActions>
       </Dialog>
   );
