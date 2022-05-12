@@ -13,6 +13,7 @@ import { styled } from "@mui/material/styles";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {
   setAccountData,
   connect2Contract,
@@ -329,11 +330,54 @@ const Home = ({ balance }) => {
                   </Box>
                 </HomeTabPanel>
                 <HomeTabPanel value={value} index={1}>
-                  Item Two
+                  <Box
+                    sx={{
+                      width: "100%",
+                      background: "#111111",
+                      padding: "1rem",
+                      borderRadius: "8px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <AccountCircleIcon fontSize="large" />
+                      <Box marginLeft={1}>
+                        <Typography variant="body1">AO</Typography>
+                        <Typography
+                          sx={{ color: "#808080" }}
+                          variant="subtitle2"
+                        >
+                          3h ago
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Box>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <Typography variant="body1">370.58</Typography>
+                        <Typography
+                          sx={{
+                            color: "#808080",
+                            fontSize: "13px",
+                            marginLeft: "5px",
+                          }}
+                        >
+                          ETH
+                        </Typography>
+                      </div>
+
+                      <Typography
+                        sx={{
+                          color: "#808080",
+                          fontSize: "12px",
+                        }}
+                      >
+                        S$1,950,000
+                      </Typography>
+                    </Box>
+                  </Box>
                 </HomeTabPanel>
-                <HomeTabPanel value={value} index={2}>
-                  Item Three
-                </HomeTabPanel>
+                <HomeTabPanel value={value} index={2}></HomeTabPanel>
               </>
             </Grid>
             <Grid item md={3}>
