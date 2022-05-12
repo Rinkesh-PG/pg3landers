@@ -8,16 +8,54 @@ import {
   Tab,
   Tabs,
   Typography,
+  Card,
+  Chip,
 } from "@mui/material";
 import axios from "axios";
+import { styled } from "@mui/material/styles";
 
 import HomeTabPanel from "../modules/home/components/HomeTabPanel";
 import image1 from "../image-1.png";
 import image2 from "../image-2.png";
 import image3 from "../image-3.png";
+import image4 from "../assets/image-4.png";
 import * as url from "url";
 import PaymentDialog from "../modules/common/components/PaymentDialog";
 import Wallet from "../modules/home/components/Wallet";
+
+const StyledTabs = styled(props => (
+  <Tabs
+    {...props}
+    TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
+  />
+))({
+  "& .MuiTabs-indicator": {
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+  },
+  "& .MuiTabs-indicatorSpan": {
+    maxWidth: 40,
+    width: "100%",
+    backgroundColor: "#fff",
+  },
+});
+
+const StyledTab = styled(props => <Tab disableRipple {...props} />)(
+  ({ theme }) => ({
+    textTransform: "none",
+    fontWeight: theme.typography.fontWeightRegular,
+    fontSize: theme.typography.pxToRem(15),
+    marginRight: theme.spacing(1),
+    color: "rgba(255, 255, 255, 0.7)",
+    "&.Mui-selected": {
+      color: "#fff",
+    },
+    "&.Mui-focusVisible": {
+      backgroundColor: "rgba(100, 95, 228, 0.32)",
+    },
+  })
+);
 
 const a11yProps = index => {
   return {
@@ -44,19 +82,34 @@ const Home = () => {
     setValue(val);
   };
 
-  const toggleDialog = (val) => {
+  const toggleDialog = val => {
     setOpen(val);
-  }
+  };
 
   return (
     <Box
       sx={{
-        background: "black",
+        background: "#1a1a1a",
         minHeight: "100vh",
         color: "white",
       }}
     >
       <Container maxWidth="lg">
+        <Box sx={{ py: 2 }}>
+          <Typography variant="h4">10 Gopeng Street</Typography>
+          <Chip
+            sx={{
+              color: "black",
+              background: "white",
+              border: "1px solid #808080",
+              borderRadius: "3px",
+            }}
+            label="Condo"
+            variant="outlined"
+            size="medium"
+          />
+        </Box>
+
         <Box sx={{ flexGrow: 1, overflow: "hidden", width: "100%" }}>
           <Grid container spacing={1}>
             <Grid item xs={4} md={6}>
@@ -94,22 +147,28 @@ const Home = () => {
         </Box>
         <Box sx={{ width: "100%" }}>
           <Box>
-            <Tabs
+            <StyledTabs
               value={value}
               onChange={handleChange}
               aria-label="basic tabs example"
               textColor={"inherit"}
             >
-              <Tab label="Details" {...a11yProps(0)} />
-              <Tab label="Bids" {...a11yProps(1)} />
-              <Tab label="History" {...a11yProps(2)} />
-            </Tabs>
+              <StyledTab label="Details" {...a11yProps(0)} />
+              <StyledTab label="Bids" {...a11yProps(1)} />
+              <StyledTab label="History" {...a11yProps(2)} />
+            </StyledTabs>
           </Box>
           <Grid container columnSpacing={2}>
-            <Grid item md={8}>
+            <Grid item md={7}>
               <>
                 <HomeTabPanel value={value} index={0}>
-                  <Box>
+                  <Box
+                    sx={{
+                      background: "#111111",
+                      padding: "1rem",
+                      borderRadius: "8px",
+                    }}
+                  >
                     <Grid
                       sx={{ marginTop: 1, alignItems: "center" }}
                       container
@@ -237,8 +296,8 @@ const Home = () => {
                 </HomeTabPanel>
               </>
             </Grid>
-            <Grid item md={3}>
-              <Box
+            <Grid item md={4}>
+              <Card
                 sx={{
                   marginTop: "-60px",
                   background: "white",
@@ -249,13 +308,21 @@ const Home = () => {
               >
                 <Box>
                   <Typography>Highest Bid</Typography>
-                  <Button onClick={() => toggleDialog(true)}>Place your bid</Button>
-                  <PaymentDialog open={open} onClose={() => toggleDialog(false)}/>
+                  <Button onClick={() => toggleDialog(true)}>
+                    Place your bid
+                  </Button>
+                  <PaymentDialog
+                    open={open}
+                    onClose={() => toggleDialog(false)}
+                  />
                 </Box>
-              </Box>
-              <div style={{marginTop: '0.5rem'}}>
-              <Wallet />
+              </Card>
+              <div style={{ marginTop: "0.5rem" }}>
+                <Wallet />
               </div>
+              <Box sx={{ marginTop: "0.5rem", width: "100%" }}>
+                <img src={image4} style={{ display: "block", width: "100%" }} />
+              </Box>
             </Grid>
           </Grid>
         </Box>

@@ -61,12 +61,12 @@ const Wallet = ({
   };
 
   return (
-    <Card variant="outlined" style={{width: '300px', padding: '2rem'}}>
+    <Card variant="outlined" style={{ padding: "2rem" }}>
       <Typography sx={{ fontSize: 16 }} gutterBottom>
         Connect with your available metamask wallet or create a new wallet to
         Sign in.
       </Typography>
-      <div style={{ textAlign: "center", marginTop: '1.5rem' }}>
+      <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
         <OutlinedButton onClick={linkWallet}>
           <div>
             Connect
@@ -126,4 +126,3 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet);
-
