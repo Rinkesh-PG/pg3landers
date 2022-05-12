@@ -14,9 +14,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
-  setAccountData,
   connect2Contract,
-  setWeb3Client,
+  setHighestBidPrice
 } from "../actions/web3Actions";
 
 import Ether from "../assets/svg/Ether.svg";
@@ -27,7 +26,7 @@ import image3 from "../image-3.png";
 import image4 from "../assets/image-4.png";
 import Wallet from "../modules/home/components/Wallet";
 import BiddingComponent from "../modules/common/components/BiddingComponent";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { formatCurrency } from "../util/common";
 
 const StyledTabs = styled(props => (
@@ -71,10 +70,21 @@ const a11yProps = index => {
   };
 };
 
-const Home = ({ balance }) => {
-  const highestBidPrice = 370.55;
+const Home = ({ balance, web3Client, contract, highestBidPrice, accountAddress }) => {
+  // const [highestBidPrice, setHighestBidPrice] = useState(370.55);
   const [initialData, setInitialData] = useState([]);
   const [value, setValue] = useState(0);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fun = async () => {
+      if (web3Client && contract) {
+        const highestBid = await contract.methods.highestBid().call();
+        dispatch(setHighestBidPrice(highestBid));
+      }
+    };
+    fun();
+  }, [web3Client, contract]);
 
   const getData = async () => {
     const { data } = await axios.get("http://3.110.107.252/api/property-list");
@@ -88,6 +98,14 @@ const Home = ({ balance }) => {
   const handleChange = (_event, val) => {
     setValue(val);
   };
+
+  useEffect(() => {
+    if (!contract) {
+      if (web3Client && accountAddress) {
+        dispatch(connect2Contract());
+      }
+    }
+  }, [web3Client, accountAddress]);
 
   return (
     <Box
@@ -138,9 +156,16 @@ const Home = ({ balance }) => {
                   marginRight: "1rem",
                 }}
               >
-                <span style={{ verticalAlign: "super", marginRight: '0.5rem' }}>Balance:</span>
-          <img src={Ether} style={{ height: "24px", filter: "invert(1)" }} />{" "}
-          <span style={{ verticalAlign: "super" }}>{formatCurrency(balance * 1000)}</span>
+                <span style={{ verticalAlign: "super", marginRight: "0.5rem" }}>
+                  Balance:
+                </span>
+                <img
+                  src={Ether}
+                  style={{ height: "24px", filter: "invert(1)" }}
+                />{" "}
+                <span style={{ verticalAlign: "super" }}>
+                  {formatCurrency(balance * 1000)}
+                </span>
               </div>
             ) : (
               ""
@@ -358,14 +383,7 @@ const mapStateToProps = (state, _ownProps) => ({
   accountAddress: state.web3Reducer.accountAddress,
   web3Client: state.web3Reducer.web3Client,
   contract: state.web3Reducer.contractMeta.contract,
+  highestBidPrice: state.web3Reducer.highestBidPrice
 });
 
-const mapDispatchToProps = dispatch => {
-  return {
-    setAccountDataProp: address => dispatch(setAccountData(address)),
-    connect2ContractProp: () => dispatch(connect2Contract()),
-    setWeb3ClientProp: client => dispatch(setWeb3Client(client)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps)(Home);

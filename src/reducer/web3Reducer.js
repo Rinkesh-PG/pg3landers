@@ -1,5 +1,6 @@
 import {
   SET_ACCOUNT_DATA,
+  SET_HIGHEST_BID,
   SET_NEW_CONTRACT,
   SET_WEB3_ERROR,
   SET_WEB3_INSTANCE,
@@ -11,88 +12,156 @@ let initialState = {
   balance: 0,
   error: {},
   contractMeta: {
-    address: "0xF2E246BB76DF876Cef8b38ae84130F4F55De395b",
-    /* abi: [
-      {
-        inputs: [],
-        stateMutability: "nonpayable",
-        type: "constructor",
-        signature: "constructor",
-      },
-      {
-        inputs: [],
-        name: "enter",
-        outputs: [],
-        stateMutability: "payable",
-        type: "function",
-        payable: true,
-        signature: "0xe97dcb62",
-      },
-      {
-        inputs: [],
-        name: "getPlayers",
-        outputs: [
-          { internalType: "address payable[]", name: "", type: "address[]" },
-        ],
-        stateMutability: "view",
-        type: "function",
-        constant: true,
-        signature: "0x8b5b9ccc",
-      },
-      {
-        inputs: [],
-        name: "manager",
-        outputs: [{ internalType: "address", name: "", type: "address" }],
-        stateMutability: "view",
-        type: "function",
-        constant: true,
-        signature: "0x481c6a75",
-      },
-      {
-        inputs: [],
-        name: "pickWinner",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-        signature: "0x5d495aea",
-      },
-      {
-        inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        name: "players",
-        outputs: [
-          { internalType: "address payable", name: "", type: "address" },
-        ],
-        stateMutability: "view",
-        type: "function",
-        constant: true,
-        signature: "0xf71d96cb",
-      },
-    ], */
+    address: "0xb93F9bCce6b2105178077f43C6aBE485Ce1DbbFf",
     abi: [
-      { type: "constructor", inputs: [], stateMutability: "nonpayable" },
       {
-        name: "greet",
+        type: "constructor",
+        inputs: [{ name: "_owner", type: "address", internalType: "address" }],
+        stateMutability: "nonpayable",
+      },
+      {
+        name: "bid_amounts",
+        type: "function",
+        inputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+        outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+        stateMutability: "view",
+      },
+      {
+        name: "bidders",
+        type: "function",
+        inputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+        outputs: [{ name: "", type: "address", internalType: "address" }],
+        stateMutability: "view",
+      },
+      {
+        name: "bids",
+        type: "function",
+        inputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+        outputs: [{ name: "", type: "address", internalType: "address" }],
+        stateMutability: "view",
+      },
+      {
+        name: "bidsCount",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+        stateMutability: "view",
+      },
+      {
+        name: "cancelAuction",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "success", type: "bool", internalType: "bool" }],
+        stateMutability: "nonpayable",
+      },
+      {
+        name: "canceled",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "bool", internalType: "bool" }],
+        stateMutability: "view",
+      },
+      {
+        name: "endBlock",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+        stateMutability: "view",
+      },
+      {
+        name: "fundsByBidder",
+        type: "function",
+        inputs: [{ name: "", type: "address", internalType: "address" }],
+        outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+        stateMutability: "view",
+      },
+      {
+        name: "getBidAmounts",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "uint256[]", internalType: "uint256[]" }],
+        stateMutability: "view",
+      },
+      {
+        name: "getBidders",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "address[]", internalType: "address[]" }],
+        stateMutability: "view",
+      },
+      {
+        name: "getWinner",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "address", internalType: "address" }],
+        stateMutability: "view",
+      },
+      {
+        name: "highestBid",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+        stateMutability: "view",
+      },
+      {
+        name: "highestBidder",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "address", internalType: "address" }],
+        stateMutability: "view",
+      },
+      {
+        name: "owner",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "address", internalType: "address" }],
+        stateMutability: "view",
+      },
+      {
+        name: "placeBid",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "success", type: "bool", internalType: "bool" }],
+        stateMutability: "payable",
+      },
+      {
+        name: "property_name",
         type: "function",
         inputs: [],
         outputs: [{ name: "", type: "string", internalType: "string" }],
         stateMutability: "view",
       },
       {
-        name: "greeting",
+        name: "setWinner",
         type: "function",
         inputs: [],
-        outputs: [{ name: "", type: "string", internalType: "string" }],
-        stateMutability: "view",
-      },
-      {
-        name: "setGreeting",
-        type: "function",
-        inputs: [{ name: "_greeting", type: "string", internalType: "string" }],
         outputs: [],
         stateMutability: "nonpayable",
+      },
+      {
+        name: "startBlock",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+        stateMutability: "view",
+      },
+      {
+        name: "status",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "bool", internalType: "bool" }],
+        stateMutability: "view",
+      },
+      {
+        name: "winner",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "address", internalType: "address" }],
+        stateMutability: "view",
       },
     ],
   },
+  highestBidPrice: 0
 };
 
 export default function web3Reducer(state, action) {
@@ -116,6 +185,12 @@ export default function web3Reducer(state, action) {
         ...state,
         contractMeta: { ...state.contractMeta, contract: payload },
       };
+
+    case SET_HIGHEST_BID:
+      return {
+        ...state,
+        highestBidPrice: payload
+      }
 
     default:
       return state;
