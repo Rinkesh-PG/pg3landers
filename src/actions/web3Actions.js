@@ -29,7 +29,7 @@ export const setAccountData = address => {
         params: [address, "latest"],
       });
       const etherBal = ethers.utils.formatEther(balance);
-      console.log("Ether bal : ", etherBal);
+
       dispatch({
         type: SET_ACCOUNT_DATA,
         payload: { accountAddress: address, balance: etherBal },

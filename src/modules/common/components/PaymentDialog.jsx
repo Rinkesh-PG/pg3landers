@@ -13,8 +13,8 @@ export default function FormDialog({open, onClose}) {
 
   return (
       <Dialog open={open} onClose={onClose}>
-        <DialogTitle>Place your bid</DialogTitle>
-        <DialogContent>
+        <DialogTitle style={{paddingLeft: '1rem'}}>Place your bid</DialogTitle>
+        <DialogContent style={{padding: '0 1rem'}}>
           <TextField
             autoFocus
             margin="dense"
@@ -43,7 +43,7 @@ export default function FormDialog({open, onClose}) {
             }}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions style={{margin: '0 0.5rem 0.5rem'}}>
           <Button onClick={onClose}>Cancel</Button>
           <Button
           style={{
