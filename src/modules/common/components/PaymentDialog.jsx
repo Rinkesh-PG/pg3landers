@@ -19,28 +19,33 @@ function PaymentDialog({
   balance,
   bidReference
 }) {
-  const currentMaxBid = 300;
   const [agree, setAgree] = React.useState(false);
   const [bidValue, setBidValue] = React.useState("");
   const [error, setError] = React.useState();
   const dispatch = useDispatch();
-
+  const [bidding, startBidding] = React.useState(false);
   const updateBid = amount => {
     setBidValue(amount);
     setError();
   };
 
   const bid = async () => {
-    if (bidValue > balance * 1000) {
+    if (+bidValue > balance * 1000) {
       setError("You don't have sufficient funds to bid");
-    } else if (bidValue > highestBidPrice) {
+    } else if (+bidValue > +highestBidPrice) {
+      startBidding(true);
       dispatch(placeBid(bidValue));
+      setBidValue('')
     } else {
       setError("Bid amount should be more than the highest bid!");
     }
   };
 
-  console.log("=====>>> ", bidReference);
+  React.useEffect(() => {
+    if(bidding && !loading) {
+      onClose();
+    }
+  }, [bidding, loading, onClose])
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -50,12 +55,12 @@ function PaymentDialog({
           autoFocus
           margin="dense"
           id="starting-bid"
-          label="Starting bid"
+          label="Last Highest bid"
           fullWidth
           variant="standard"
           aria-readonly
           disabled
-          value={currentMaxBid}
+          value={highestBidPrice}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">ETH</InputAdornment>

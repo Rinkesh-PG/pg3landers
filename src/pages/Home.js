@@ -72,7 +72,6 @@ const a11yProps = index => {
 };
 
 const Home = ({ balance, web3Client, contract, highestBidPrice, accountAddress }) => {
-  // const [highestBidPrice, setHighestBidPrice] = useState(370.55);
   const [initialData, setInitialData] = useState([]);
   const [value, setValue] = useState(0);
   const dispatch = useDispatch();

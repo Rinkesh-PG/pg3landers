@@ -18,10 +18,10 @@ export const setWeb3Client = instance => {
 };
 
 export const setHighestBidPrice = price => {
-    return {
-        type: SET_HIGHEST_BID,
-        payload: price
-    }
+  return {
+    type: SET_HIGHEST_BID,
+    payload: price,
+  };
 };
 
 export const setWeb3Error = error => {
@@ -51,35 +51,40 @@ export const setAccountData = address => {
 };
 
 export const updateHighestBidAmout = () => {
-    return async (dispatch, getState) => {
-        const web3Reducer = getState().web3Reducer;
-        const { contract } = web3Reducer.contractMeta
-        const highestBid = await contract.methods.highestBid().call();
-        dispatch(setHighestBidPrice(highestBid));
-    }
-}
+  return async (dispatch, getState) => {
+    const web3Reducer = getState().web3Reducer;
+    const { contract } = web3Reducer.contractMeta;
+    const highestBid = await contract.methods.highestBid().call();
+    dispatch(setHighestBidPrice(highestBid));
+  };
+};
 
 export const setLoading = value => {
-    return {
-        type: SET_LOADING,
-        payload: value
-    }
-}
+  return {
+    type: SET_LOADING,
+    payload: value,
+  };
+};
 
-export const placeBid = (bidAmount) => {
-    return async (dispatch, getState) => {
-        dispatch(setLoading(true));
-        const web3Reducer = getState().web3Reducer;
-        const { contract } = web3Reducer.contractMeta;
-        const bidAddress = await contract.methods.placeBid(bidAmount).send(
-            { from: web3Reducer.accountAddress }
-            // {from: accountAddress, value: web3Client.utils.toWei('5', "wei"),}
-          );
-        dispatch({type: SET_BID_TRANSACTION, payload: bidAddress})
-        dispatch(updateHighestBidAmout());
-        dispatch(setLoading(false));
+export const placeBid = bidAmount => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(setLoading(true));
+      const web3Reducer = getState().web3Reducer;
+      const { contract } = web3Reducer.contractMeta;
+      const bidAddress = await contract.methods.placeBid(bidAmount).send(
+        { from: web3Reducer.accountAddress }
+        // {from: accountAddress, value: web3Client.utils.toWei('5', "wei"),}
+      );
+      dispatch({ type: SET_BID_TRANSACTION, payload: bidAddress });
+      dispatch(updateHighestBidAmout());
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setLoading(false));
+      setWeb3Error(error);
     }
-}
+  };
+};
 
 export const connect2Contract = () => {
   return (dispatch, getState) => {
@@ -89,3 +94,4 @@ export const connect2Contract = () => {
     dispatch({ type: SET_NEW_CONTRACT, payload: contract });
   };
 };
+

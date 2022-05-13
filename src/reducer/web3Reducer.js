@@ -5,7 +5,7 @@ import {
   SET_WEB3_ERROR,
   SET_WEB3_INSTANCE,
   SET_BID_TRANSACTION,
-  SET_LOADING
+  SET_LOADING,
 } from "../actions/web3Actions";
 
 let initialState = {
@@ -15,7 +15,7 @@ let initialState = {
   balance: 0,
   error: {},
   contractMeta: {
-    address: "0x7fEBAB072046165f86f5DC7Bb42efA3A8E8224dc",
+    address: "0xb808b2511ed7fa78D64F2cCA4965302E12292Ec2",
     abi: [
       {
         type: "constructor",
@@ -62,6 +62,13 @@ let initialState = {
         type: "function",
         inputs: [],
         outputs: [{ name: "", type: "bool", internalType: "bool" }],
+        stateMutability: "view",
+      },
+      {
+        name: "depositsByBidder",
+        type: "function",
+        inputs: [{ name: "", type: "address", internalType: "address" }],
+        outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
         stateMutability: "view",
       },
       {
@@ -114,6 +121,13 @@ let initialState = {
         stateMutability: "view",
       },
       {
+        name: "minDep",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+        stateMutability: "view",
+      },
+      {
         name: "owner",
         type: "function",
         inputs: [],
@@ -156,6 +170,13 @@ let initialState = {
         stateMutability: "view",
       },
       {
+        name: "totalDep",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+        stateMutability: "view",
+      },
+      {
         name: "winner",
         type: "function",
         inputs: [],
@@ -165,7 +186,7 @@ let initialState = {
     ],
   },
   highestBidPrice: 0,
-  bidReference: null
+  bidReference: null,
 };
 
 export default function web3Reducer(state, action) {
@@ -196,17 +217,17 @@ export default function web3Reducer(state, action) {
         highestBidPrice: payload,
       };
 
-    case SET_BID_TRANSACTION: 
+    case SET_BID_TRANSACTION:
       return {
         ...state,
-        bidReference: payload
-      }
+        bidReference: payload,
+      };
 
     case SET_LOADING:
       return {
         ...state,
-        loading: payload
-      }
+        loading: payload,
+      };
 
     default:
       return state;
