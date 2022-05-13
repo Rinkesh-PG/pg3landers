@@ -16,7 +16,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {
   connect2Contract,
-  setHighestBidPrice
+  updateHighestBidAmout
 } from "../actions/web3Actions";
 
 import Ether from "../assets/svg/Ether.svg";
@@ -80,8 +80,7 @@ const Home = ({ balance, web3Client, contract, highestBidPrice, accountAddress }
   useEffect(() => {
     const fun = async () => {
       if (web3Client && contract) {
-        const highestBid = await contract.methods.highestBid().call();
-        dispatch(setHighestBidPrice(highestBid));
+        dispatch(updateHighestBidAmout());
       }
     };
     fun();

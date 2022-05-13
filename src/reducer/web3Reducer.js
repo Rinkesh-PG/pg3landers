@@ -4,9 +4,12 @@ import {
   SET_NEW_CONTRACT,
   SET_WEB3_ERROR,
   SET_WEB3_INSTANCE,
+  SET_BID_TRANSACTION,
+  SET_LOADING
 } from "../actions/web3Actions";
 
 let initialState = {
+  loading: false,
   web3Client: null,
   accountAddress: null,
   balance: 0,
@@ -162,6 +165,7 @@ let initialState = {
     ],
   },
   highestBidPrice: 0,
+  bidReference: null
 };
 
 export default function web3Reducer(state, action) {
@@ -191,6 +195,18 @@ export default function web3Reducer(state, action) {
         ...state,
         highestBidPrice: payload,
       };
+
+    case SET_BID_TRANSACTION: 
+      return {
+        ...state,
+        bidReference: payload
+      }
+
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: payload
+      }
 
     default:
       return state;

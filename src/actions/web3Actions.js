@@ -7,6 +7,8 @@ export const SET_WEB3_ERROR = "SET_WEB3_ERROR";
 export const SET_ACCOUNT_DATA = "SET_ACCOUNT_DATA";
 export const SET_NEW_CONTRACT = "SET_NEW_CONTRACT";
 export const SET_HIGHEST_BID = "SET_HIGHEST_BID";
+export const SET_BID_TRANSACTION = "SET_BID_TRANSACTION";
+export const SET_LOADING = "SET_LOADING";
 
 export const setWeb3Client = instance => {
   return {
@@ -42,13 +44,42 @@ export const setAccountData = address => {
         type: SET_ACCOUNT_DATA,
         payload: { accountAddress: address, balance: etherBal },
       });
-    //   const web3 = new Web3(window.ethereum)
-    //   dispatch(setWeb3Client(web3))
     } catch (error) {
       setWeb3Error(error);
     }
   };
 };
+
+export const updateHighestBidAmout = () => {
+    return async (dispatch, getState) => {
+        const web3Reducer = getState().web3Reducer;
+        const { contract } = web3Reducer.contractMeta
+        const highestBid = await contract.methods.highestBid().call();
+        dispatch(setHighestBidPrice(highestBid));
+    }
+}
+
+export const setLoading = value => {
+    return {
+        type: SET_LOADING,
+        payload: value
+    }
+}
+
+export const placeBid = (bidAmount) => {
+    return async (dispatch, getState) => {
+        dispatch(setLoading(true));
+        const web3Reducer = getState().web3Reducer;
+        const { contract } = web3Reducer.contractMeta;
+        const bidAddress = await contract.methods.placeBid(bidAmount).send(
+            { from: web3Reducer.accountAddress }
+            // {from: accountAddress, value: web3Client.utils.toWei('5', "wei"),}
+          );
+        dispatch({type: SET_BID_TRANSACTION, payload: bidAddress})
+        dispatch(updateHighestBidAmout());
+        dispatch(setLoading(false));
+    }
+}
 
 export const connect2Contract = () => {
   return (dispatch, getState) => {
