@@ -103,6 +103,7 @@ export const closeAuction = () => {
       dispatch(setLoading(true));
       const web3Reducer = getState().web3Reducer;
       const { contract } = web3Reducer.contractMeta;
+      console.log('==>> accoutn owner action : ', web3Reducer.accountAddress)
       await contract.methods.setWinner().call();
       await contract.methods.cancelAuction().call();
       const winner = await contract.methods.getWinner().call();

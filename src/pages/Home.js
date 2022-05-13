@@ -17,7 +17,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {
   connect2Contract,
   getAuctionWinner,
-  updateHighestBidAmout
+  updateHighestBidAmout,
 } from "../actions/web3Actions";
 
 import Ether from "../assets/svg/Ether.svg";
@@ -72,11 +72,20 @@ const a11yProps = index => {
   };
 };
 
-const Home = ({ balance, web3Client, contract, highestBidPrice, accountAddress, auctionWinner }) => {
+const Home = ({
+  balance,
+  web3Client,
+  contract,
+  highestBidPrice,
+  accountAddress,
+  auctionWinner,
+}) => {
   const [initialData, setInitialData] = useState([]);
   const [value, setValue] = useState(0);
   const dispatch = useDispatch();
-  console.log('===>> winner : ', auctionWinner);
+  const auctionClosed =
+    auctionWinner && auctionWinner !== "0x0000000000000000000000000000000000000000";
+  console.log("===>> winner : ", auctionWinner);
   useEffect(() => {
     const fun = async () => {
       if (web3Client && contract) {
@@ -119,9 +128,9 @@ const Home = ({ balance, web3Client, contract, highestBidPrice, accountAddress, 
   return (
     <Box
       sx={{
-        background: "#1a1a1a",
+        background: auctionClosed ? "#ffffff" : "#1a1a1a",
         minHeight: "100vh",
-        color: "white",
+        color: auctionClosed ? "black": "white",
       }}
     >
       <Container maxWidth="lg">
@@ -426,7 +435,11 @@ const Home = ({ balance, web3Client, contract, highestBidPrice, accountAddress, 
               </>
             </Grid>
             <Grid item md={3}>
-              <BiddingComponent highestBidPrice={highestBidPrice} />
+              {auctionClosed ? (
+                <div>{auctionWinner} has won the Auction!</div>
+              ) : (
+                <BiddingComponent highestBidPrice={highestBidPrice} />
+              )}
               <div style={{ marginTop: "0.5rem" }}>
                 {!balance && <Wallet />}
               </div>
@@ -448,7 +461,7 @@ const mapStateToProps = (state, _ownProps) => ({
   web3Client: state.web3Reducer.web3Client,
   contract: state.web3Reducer.contractMeta.contract,
   highestBidPrice: state.web3Reducer.highestBidPrice,
-  auctionWinner: state.web3Reducer.auctionWinner
+  auctionWinner: state.web3Reducer.auctionWinner,
 });
 
 export default connect(mapStateToProps)(Home);

@@ -17,7 +17,7 @@ let initialState = {
   error: {},
   auctionWinner: null,
   contractMeta: {
-    address: "0xb808b2511ed7fa78D64F2cCA4965302E12292Ec2",
+    address: "0xfC4130317030ecf436b86Db681ec726bA1f7d289",
     abi: [
       {
         type: "constructor",
@@ -151,6 +151,13 @@ let initialState = {
         stateMutability: "view",
       },
       {
+        name: "reopenAuction",
+        type: "function",
+        inputs: [],
+        outputs: [{ name: "success", type: "bool", internalType: "bool" }],
+        stateMutability: "nonpayable",
+      },
+      {
         name: "setWinner",
         type: "function",
         inputs: [],
@@ -234,8 +241,8 @@ export default function web3Reducer(state, action) {
     case SET_AUCTION_WINNER:
       return {
         ...state,
-        auctionWinner: payload
-      }
+        auctionWinner: payload,
+      };
 
     default:
       return state;
