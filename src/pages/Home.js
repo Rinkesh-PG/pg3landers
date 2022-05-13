@@ -18,6 +18,7 @@ import {
   connect2Contract,
   getAuctionWinner,
   updateHighestBidAmout,
+  setUSDRate
 } from "../actions/web3Actions";
 
 import Ether from "../assets/svg/Ether.svg";
@@ -79,6 +80,7 @@ const Home = ({
   highestBidPrice,
   accountAddress,
   auctionWinner,
+  usdConversion
 }) => {
   const [initialData, setInitialData] = useState([]);
   const [value, setValue] = useState(0);
@@ -106,6 +108,20 @@ const Home = ({
     ]);
     setInitialData(format);
   };
+
+  useEffect(() => {
+    getUSDRate();
+    const interval = setInterval(() => {
+      getUSDRate();
+    }, 3000);
+    return () => clearInterval(interval);
+  })
+
+  const getUSDRate = async () => {
+    const { data: { USD } } = await axios.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD');
+    console.log('===>>data: ', USD);
+    dispatch(setUSDRate(USD));
+  }
 
   console.log(initialData);
 
@@ -423,7 +439,7 @@ const Home = ({
                                 fontSize: "12px",
                               }}
                             >
-                              S$1,950,000
+                              {a[1] * usdConversion}
                             </Typography>
                           </Box>
                         </div>
@@ -462,6 +478,7 @@ const mapStateToProps = (state, _ownProps) => ({
   contract: state.web3Reducer.contractMeta.contract,
   highestBidPrice: state.web3Reducer.highestBidPrice,
   auctionWinner: state.web3Reducer.auctionWinner,
+  usdConversion: state.web3Reducer.usdConversion
 });
 
 export default connect(mapStateToProps)(Home);

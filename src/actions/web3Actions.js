@@ -10,6 +10,7 @@ export const SET_HIGHEST_BID = "SET_HIGHEST_BID";
 export const SET_BID_TRANSACTION = "SET_BID_TRANSACTION";
 export const SET_LOADING = "SET_LOADING";
 export const SET_AUCTION_WINNER = "SET_AUCTION_WINNER";
+export const SET_USD_CONVERSION = "SET_USD_CONVERSION";
 
 export const setWeb3Client = instance => {
   return {
@@ -31,6 +32,13 @@ export const setWeb3Error = error => {
     payload: error,
   };
 };
+
+export const setUSDRate = rate => {
+    return {
+        type: SET_USD_CONVERSION,
+        payload: rate
+    }
+}
 
 export const setAccountData = address => {
   return async dispatch => {

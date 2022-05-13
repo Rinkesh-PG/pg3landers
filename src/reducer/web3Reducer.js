@@ -7,6 +7,7 @@ import {
   SET_BID_TRANSACTION,
   SET_LOADING,
   SET_AUCTION_WINNER,
+  SET_USD_CONVERSION,
 } from "../actions/web3Actions";
 
 let initialState = {
@@ -243,6 +244,12 @@ export default function web3Reducer(state, action) {
         ...state,
         auctionWinner: payload,
       };
+
+    case SET_USD_CONVERSION:
+      return {
+        ...state,
+        usdConversion: payload
+      }
 
     default:
       return state;

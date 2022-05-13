@@ -6,12 +6,12 @@ import PaymentDialog from "./PaymentDialog";
 import { connect, useDispatch } from "react-redux";
 import { closeAuction as closeAuctionAction } from "../../../actions/web3Actions";
 import { LoadingButton } from "@mui/lab";
-const etherConvRate = 2076.27;
 
 const BiddingComponent = ({
   highestBidPrice,
   accountAddress,
-  loading
+  loading,
+  usdConversion
 }) => {
     console.log('==>> account : ', accountAddress)
   const [open, setOpen] = useState(false);
@@ -69,7 +69,7 @@ const BiddingComponent = ({
               </span>
             </div>
             <Typography sx={{ fontSize: "12px", fontWeight: "300" }}>
-              ${formatCurrency(highestBidPrice * etherConvRate)}
+              ${formatCurrency(highestBidPrice * usdConversion)}
             </Typography>
           </div>
           <div style={{ width: "50%", textAlign: "center" }}>
@@ -93,7 +93,7 @@ const BiddingComponent = ({
               </span>
             </div>
             <Typography sx={{ fontSize: "12px", fontWeight: "300" }}>
-              ${formatCurrency(450 * etherConvRate)}
+              ${formatCurrency(450 * usdConversion)}
             </Typography>
           </div>
         </div>
@@ -151,6 +151,7 @@ const mapStateToProps = (state, _ownProps) => ({
   web3Client: state.web3Reducer.web3Client,
   contract: state.web3Reducer.contractMeta.contract,
   highestBidPrice: state.web3Reducer.highestBidPrice,
+  usdConversion: state.web3Reducer.usdConversion
 });
 
 export default connect(mapStateToProps)(BiddingComponent);
