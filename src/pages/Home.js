@@ -16,7 +16,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {
   connect2Contract,
-  updateHighestBidAmout
+  updateHighestBidAmout,
 } from "../actions/web3Actions";
 
 import Ether from "../assets/svg/Ether.svg";
@@ -71,7 +71,13 @@ const a11yProps = index => {
   };
 };
 
-const Home = ({ balance, web3Client, contract, highestBidPrice, accountAddress }) => {
+const Home = ({
+  balance,
+  web3Client,
+  contract,
+  highestBidPrice,
+  accountAddress,
+}) => {
   const [initialData, setInitialData] = useState([]);
   const [value, setValue] = useState(0);
   const dispatch = useDispatch();
@@ -86,9 +92,17 @@ const Home = ({ balance, web3Client, contract, highestBidPrice, accountAddress }
   }, [web3Client, contract]);
 
   const getData = async () => {
-    const { data } = await axios.get("http://3.110.107.252/api/property-list");
-    setInitialData(data);
+    const { data } = await axios.get(
+      "http://3.110.107.252/api/get-all-contract-bids/Auction"
+    );
+    const format = Object.keys(data.data).map(key => [
+      Number(key),
+      data.data[key],
+    ]);
+    setInitialData(format);
   };
+
+  console.log(initialData);
 
   useEffect(() => {
     getData();
@@ -359,45 +373,57 @@ const Home = ({ balance, web3Client, contract, highestBidPrice, accountAddress }
                       background: "#111111",
                       padding: "1rem",
                       borderRadius: "8px",
-                      display: "flex",
-                      justifyContent: "space-between",
                     }}
                   >
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <AccountCircleIcon fontSize="large" />
-                      <Box marginLeft={1}>
-                        <Typography variant="body1">AO</Typography>
-                        <Typography
-                          sx={{ color: "#808080" }}
-                          variant="subtitle2"
-                        >
-                          3h ago
-                        </Typography>
-                      </Box>
-                    </Box>
-                    <Box>
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        <Typography variant="body1">370.58</Typography>
-                        <Typography
-                          sx={{
-                            color: "#808080",
-                            fontSize: "13px",
-                            marginLeft: "5px",
+                    {initialData.map(a => {
+                      return (
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            padding: "5px",
                           }}
                         >
-                          ETH
-                        </Typography>
-                      </div>
+                          <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <AccountCircleIcon fontSize="large" />
+                            <Box marginLeft={1}>
+                              <Typography variant="body1">{a[0]}</Typography>
+                              <Typography
+                                sx={{ color: "#808080" }}
+                                variant="subtitle2"
+                              >
+                                3h ago
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Box>
+                            <div
+                              style={{ display: "flex", alignItems: "center" }}
+                            >
+                              <Typography variant="body1">{a[1]}</Typography>
+                              <Typography
+                                sx={{
+                                  color: "#808080",
+                                  fontSize: "13px",
+                                  marginLeft: "5px",
+                                }}
+                              >
+                                ETH
+                              </Typography>
+                            </div>
 
-                      <Typography
-                        sx={{
-                          color: "#808080",
-                          fontSize: "12px",
-                        }}
-                      >
-                        S$1,950,000
-                      </Typography>
-                    </Box>
+                            <Typography
+                              sx={{
+                                color: "#808080",
+                                fontSize: "12px",
+                              }}
+                            >
+                              S$1,950,000
+                            </Typography>
+                          </Box>
+                        </div>
+                      );
+                    })}
                   </Box>
                 </HomeTabPanel>
                 <HomeTabPanel value={value} index={2}></HomeTabPanel>
@@ -425,7 +451,7 @@ const mapStateToProps = (state, _ownProps) => ({
   accountAddress: state.web3Reducer.accountAddress,
   web3Client: state.web3Reducer.web3Client,
   contract: state.web3Reducer.contractMeta.contract,
-  highestBidPrice: state.web3Reducer.highestBidPrice
+  highestBidPrice: state.web3Reducer.highestBidPrice,
 });
 
 export default connect(mapStateToProps)(Home);
