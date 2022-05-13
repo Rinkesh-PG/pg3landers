@@ -12,7 +12,7 @@ let initialState = {
   balance: 0,
   error: {},
   contractMeta: {
-    address: "0xb93F9bCce6b2105178077f43C6aBE485Ce1DbbFf",
+    address: "0x7fEBAB072046165f86f5DC7Bb42efA3A8E8224dc",
     abi: [
       {
         type: "constructor",
@@ -120,9 +120,9 @@ let initialState = {
       {
         name: "placeBid",
         type: "function",
-        inputs: [],
-        outputs: [{ name: "success", type: "bool", internalType: "bool" }],
-        stateMutability: "payable",
+        inputs: [{ name: "xyz", type: "uint256", internalType: "uint256" }],
+        outputs: [{ name: "", type: "bool", internalType: "bool" }],
+        stateMutability: "nonpayable",
       },
       {
         name: "property_name",
@@ -161,7 +161,7 @@ let initialState = {
       },
     ],
   },
-  highestBidPrice: 0
+  highestBidPrice: 0,
 };
 
 export default function web3Reducer(state, action) {
@@ -189,8 +189,8 @@ export default function web3Reducer(state, action) {
     case SET_HIGHEST_BID:
       return {
         ...state,
-        highestBidPrice: payload
-      }
+        highestBidPrice: payload,
+      };
 
     default:
       return state;

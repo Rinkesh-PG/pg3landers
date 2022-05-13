@@ -8,10 +8,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Checkbox, InputAdornment } from '@mui/material';
 import { connect } from 'react-redux';
 
-function PaymentDialog({open, onClose, highestBidPrice, contract, web3Client, accountAddress}) {
+function PaymentDialog({open, onClose, highestBidPrice, contract, web3Client, accountAddress, balance}) {
   const currentMaxBid = 300;
   const [agree, setAgree] = React.useState(false);
-  const [bidValue, setBidValue] = React.useState();
+  const [bidValue, setBidValue] = React.useState('');
   const [error, setError] = React.useState();
 
   const updateBid = (amount) => {
@@ -20,9 +20,13 @@ function PaymentDialog({open, onClose, highestBidPrice, contract, web3Client, ac
   }
 
   const placeBid = async () => {
-    if (bidValue > highestBidPrice) {
-      const bidAddress = await contract.methods.placeBid().send(
-        {from: accountAddress, value: web3Client.utils.toWei(bidValue, "wei"),}
+    if (bidValue > balance * 1000 ) {
+      setError("You don't have sufficient funds to bid");
+    }
+    else if (bidValue > highestBidPrice) {
+      const bidAddress = await contract.methods.placeBid(bidValue).send(
+        {from: accountAddress}
+        // {from: accountAddress, value: web3Client.utils.toWei('5', "wei"),}
       );
       console.log('=====>>> ', bidAddress);
       console.log('=====>>> ', JSON.stringify(bidAddress))
