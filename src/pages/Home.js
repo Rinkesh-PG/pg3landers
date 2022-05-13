@@ -16,7 +16,8 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {
   connect2Contract,
-  updateHighestBidAmout,
+  getAuctionWinner,
+  updateHighestBidAmout
 } from "../actions/web3Actions";
 
 import Ether from "../assets/svg/Ether.svg";
@@ -71,21 +72,16 @@ const a11yProps = index => {
   };
 };
 
-const Home = ({
-  balance,
-  web3Client,
-  contract,
-  highestBidPrice,
-  accountAddress,
-}) => {
+const Home = ({ balance, web3Client, contract, highestBidPrice, accountAddress, auctionWinner }) => {
   const [initialData, setInitialData] = useState([]);
   const [value, setValue] = useState(0);
   const dispatch = useDispatch();
-
+  console.log('===>> winner : ', auctionWinner);
   useEffect(() => {
     const fun = async () => {
       if (web3Client && contract) {
         dispatch(updateHighestBidAmout());
+        dispatch(getAuctionWinner());
       }
     };
     fun();
@@ -452,6 +448,7 @@ const mapStateToProps = (state, _ownProps) => ({
   web3Client: state.web3Reducer.web3Client,
   contract: state.web3Reducer.contractMeta.contract,
   highestBidPrice: state.web3Reducer.highestBidPrice,
+  auctionWinner: state.web3Reducer.auctionWinner
 });
 
 export default connect(mapStateToProps)(Home);

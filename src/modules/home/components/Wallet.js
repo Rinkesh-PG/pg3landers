@@ -22,28 +22,6 @@ const Wallet = ({
   setWeb3ClientProp,
 }) => {
   const dispatch = useDispatch();
-  // TODO: Remove examples of how to call contract
-  // useEffect(() => {
-  //   const fun = async () => {
-  //     if (web3Client && contract) {
-  //       const bid = await contract.methods
-  //         .placeBid()
-  //         .send({
-  //           from: accountAddress,
-  //           value: web3Client.utils.toWei("0.01", "ether"),
-  //         });
-  //       const highestBid = await contract.methods.highestBid().call();
-  //       const highestBidder = await contract.methods.highestBidder().call();
-  //       console.log(
-  //         "===> manager & Players : ",
-  //         highestBid,
-  //         highestBidder,
-  //         bid
-  //       );
-  //     }
-  //   };
-  //   fun();
-  // }, [web3Client, contract]);
 
   useEffect(() => {
     if (window.ethereum) {

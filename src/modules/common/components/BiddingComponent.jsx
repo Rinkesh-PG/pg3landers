@@ -1,19 +1,30 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Typography,
-  Card,
-} from "@mui/material";
+import { Button, Typography, Card } from "@mui/material";
 import Ether from "../../../assets/svg/Ether.svg";
 import { formatCurrency } from "../../../util/common";
 import PaymentDialog from "./PaymentDialog";
-const etherConvRate = 1925.8;
+import { connect, useDispatch } from "react-redux";
+import { closeAuction as closeAuctionAction } from "../../../actions/web3Actions";
+import { LoadingButton } from "@mui/lab";
+const etherConvRate = 2076.27;
 
-export default ({highestBidPrice}) => {
-    const [open, setOpen] = useState(false);
-    const toggleDialog = val => {
-        setOpen(val);
-      };
+const BiddingComponent = ({
+  highestBidPrice,
+  accountAddress,
+  loading
+}) => {
+    console.log('==>> account : ', accountAddress)
+  const [open, setOpen] = useState(false);
+  const toggleDialog = val => {
+    setOpen(val);
+  };
+
+  const dispatch = useDispatch();
+
+  const closeAuction = () => {
+    dispatch(closeAuctionAction());
+  }
+
   return (
     <Card
       sx={{
@@ -99,19 +110,47 @@ export default ({highestBidPrice}) => {
         </div>
       </div>
       <div style={{ textAlign: "center", margin: "0.5rem 0" }}>
-        <Button
-          style={{
-            background: "#f24727",
-            color: "white",
-            padding: "10px",
-            fontWeight: "bold",
-          }}
-          onClick={() => toggleDialog(true)}
-        >
-          Place your bid
-        </Button>
+        {accountAddress === "0x50c58217089cb5efa3c90919075a1a8d62b8035c" ? (
+            <LoadingButton
+            style={{
+              background: "#f24727",
+              color: "white",
+              padding: "10px",
+              fontWeight: "bold",
+            }}
+            loading={loading}
+            loadingPosition="start"
+            onClick={closeAuction}
+            variant="outlined"
+          >
+            Close Auction
+          </LoadingButton>
+        ) : (
+          <Button
+            style={{
+              background: "#f24727",
+              color: "white",
+              padding: "10px",
+              fontWeight: "bold",
+            }}
+            onClick={() => toggleDialog(true)}
+          >
+            Place your bid
+          </Button>
+        )}
       </div>
       <PaymentDialog open={open} onClose={() => toggleDialog(false)} />
     </Card>
   );
 };
+
+const mapStateToProps = (state, _ownProps) => ({
+  metamaskError: state.web3Reducer.error,
+  balance: state.web3Reducer.balance,
+  accountAddress: state.web3Reducer.accountAddress,
+  web3Client: state.web3Reducer.web3Client,
+  contract: state.web3Reducer.contractMeta.contract,
+  highestBidPrice: state.web3Reducer.highestBidPrice,
+});
+
+export default connect(mapStateToProps)(BiddingComponent);

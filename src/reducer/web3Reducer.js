@@ -6,6 +6,7 @@ import {
   SET_WEB3_INSTANCE,
   SET_BID_TRANSACTION,
   SET_LOADING,
+  SET_AUCTION_WINNER,
 } from "../actions/web3Actions";
 
 let initialState = {
@@ -14,6 +15,7 @@ let initialState = {
   accountAddress: null,
   balance: 0,
   error: {},
+  auctionWinner: null,
   contractMeta: {
     address: "0xb808b2511ed7fa78D64F2cCA4965302E12292Ec2",
     abi: [
@@ -228,6 +230,12 @@ export default function web3Reducer(state, action) {
         ...state,
         loading: payload,
       };
+
+    case SET_AUCTION_WINNER:
+      return {
+        ...state,
+        auctionWinner: payload
+      }
 
     default:
       return state;

@@ -9,6 +9,7 @@ export const SET_NEW_CONTRACT = "SET_NEW_CONTRACT";
 export const SET_HIGHEST_BID = "SET_HIGHEST_BID";
 export const SET_BID_TRANSACTION = "SET_BID_TRANSACTION";
 export const SET_LOADING = "SET_LOADING";
+export const SET_AUCTION_WINNER = "SET_AUCTION_WINNER";
 
 export const setWeb3Client = instance => {
   return {
@@ -59,6 +60,16 @@ export const updateHighestBidAmout = () => {
   };
 };
 
+export const getAuctionWinner = () => {
+  return async (dispatch, getState) => {
+    const web3Reducer = getState().web3Reducer;
+    const { contract } = web3Reducer.contractMeta;
+    const winner = await contract.methods.getWinner().call();
+    console.log("==> winner : ", winner);
+    dispatch({ type: SET_AUCTION_WINNER, payload: winner });
+  };
+};
+
 export const setLoading = value => {
   return {
     type: SET_LOADING,
@@ -78,6 +89,25 @@ export const placeBid = bidAmount => {
       );
       dispatch({ type: SET_BID_TRANSACTION, payload: bidAddress });
       dispatch(updateHighestBidAmout());
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setLoading(false));
+      setWeb3Error(error);
+    }
+  };
+};
+
+export const closeAuction = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(setLoading(true));
+      const web3Reducer = getState().web3Reducer;
+      const { contract } = web3Reducer.contractMeta;
+      await contract.methods.setWinner().call();
+      await contract.methods.cancelAuction().call();
+      const winner = await contract.methods.getWinner().call();
+      console.log("==> winner : ", winner);
+      dispatch({ type: SET_AUCTION_WINNER, payload: winner });
       dispatch(setLoading(false));
     } catch (error) {
       dispatch(setLoading(false));
